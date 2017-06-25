@@ -7,9 +7,12 @@ os.environ["THEANO_FLAGS"] = "device=cuda"+sys.argv[1]
 import numpy as np
 from keras.layers import *
 from keras.models import Model, model_from_json
+import sklearn.preprocessing
+from sklearn.externals import joblib
 
 model_names = ['DNN', 'DNN_dyn', 'DBLSTM', 'DBLSTM_dyn']
 testlist=open('tmp/testlist.txt').readlines()
+scaler=joblib.load('tmp/train_target.scaler.pkl')
 
 for name in model_names:
 
@@ -49,6 +52,7 @@ for name in model_names:
             #os.system('x2x +af '+filename[:-3]+'d.'+name+'.csv'+' > '+filename[:-3]+'d.'+name+'.f')
             #os.system('x2x +af '+filename[:-3]+'dd.'+name+'.csv'+' > '+filename[:-3]+'dd.'+name+'.f')
 
+            pred_mcep=scaler.inverse_transform(pred_mcep)
             pred_mcep=np.concatenate((energy,pred_mcep),axis=1)
             np.savetxt(filename[:-3]+'mcep.'+name+'.csv', pred_mcep)
 
@@ -60,6 +64,7 @@ for name in model_names:
             #pred_mcep=np.concatenate((energy,pred_mcep),axis=1)
             #np.savetxt(filename[:-3]+'mcep.mlpg'+name+'.csv', pred_mcep)
         else:
+            pred_mcep=scaler.inverse_transform(pred_mcep)
             pred_mcep=np.concatenate((energy,Pred[i,:length,:]),axis=1)
             np.savetxt(filename[:-3]+'mcep.'+name+'.csv', pred_mcep)
     print()

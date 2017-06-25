@@ -1,0 +1,6 @@
+[submodule "tools/matlab/STRAIGHT"]
+	path = tools/matlab/STRAIGHT
+	url = https://github.com/petronny/STRAIGHT
+[submodule "tools/STRAIGHT"]
+	path = tools/STRAIGHT
+	url = https://github.com/petronny/STRAIGHT

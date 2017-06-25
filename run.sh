@@ -77,12 +77,14 @@ generate_datasets(){
 concat_features(){
 	echo "Concatenating features"
 	rm tmp/*.{npy,pkl}
-	sed 's/wav$/mcep.dtw.csv/g' tmp/trainlist.txt | python keras/concat_features.py tmp/train_source.dtw
-	sed 's/wav$/mcep.dtw.csv/g' tmp/testlist.txt | python keras/concat_features.py tmp/test_source.dtw
-	sed -e 's/wav$/mcep.dtw.csv/g' -e 's/awb/slt/g' tmp/trainlist.txt | python keras/concat_features.py tmp/train_target.dtw
-	sed -e 's/wav$/mcep.dtw.csv/g' -e 's/awb/slt/g' tmp/testlist.txt | python keras/concat_features.py tmp/test_target.dtw
 	sed 's/wav$/mcep.csv/g' tmp/trainlist.txt | python keras/concat_features.py tmp/train_source
 	sed 's/wav$/mcep.csv/g' tmp/testlist.txt | python keras/concat_features.py tmp/test_source
+	sed -e 's/awb/slt/g' -e 's/wav$/mcep.csv/g' tmp/trainlist.txt | python keras/concat_features.py tmp/train_target
+	sed -e 's/awb/slt/g' -e 's/wav$/mcep.csv/g' tmp/testlist.txt | python keras/concat_features.py tmp/test_target
+	sed 's/wav$/mcep.dtw.csv/g' tmp/trainlist.txt | python keras/concat_features.py tmp/train_source.dtw
+	sed 's/wav$/mcep.dtw.csv/g' tmp/testlist.txt | python keras/concat_features.py tmp/test_source.dtw
+	sed -e 's/awb/slt/g' -e 's/wav$/mcep.dtw.csv/g' tmp/trainlist.txt | python keras/concat_features.py tmp/train_target.dtw
+	sed -e 's/awb/slt/g' -e 's/wav$/mcep.dtw.csv/g' tmp/testlist.txt | python keras/concat_features.py tmp/test_target.dtw
 }
 
 DNN(){

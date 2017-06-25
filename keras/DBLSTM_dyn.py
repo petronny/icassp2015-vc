@@ -14,11 +14,11 @@ from keras.models import Model, model_from_json
 # Read source speaker acoustic features and target speaker acoustic features from prepared database
 print('Loading acoustic train data...')
 x_train = np.load('tmp/train_source.dtw.dyn.npy')#Source mcep
-y_train = np.load('tmp/train_target.dtw.dyn.npy')#Target mcep
+y_train = np.load('tmp/train_target.dtw.npy')[:,:-2,:]#Target mcep
 
 print('Loading acoustic validation data...')
 x_valid = np.load('tmp/test_source.dtw.dyn.npy')#Source mcep
-y_valid = np.load('tmp/test_target.dtw.dyn.npy')#Target mcep
+y_valid = np.load('tmp/test_target.dtw.npy')[:,:-2,:]#Target mcep
 
 # Hyper-parameter settings
 batch_size = 32
@@ -33,7 +33,7 @@ maksed_input = Masking(mask_value=0.)(input)
 # # apply DBLSTM
 DBLSTM_layer_1 = Bidirectional(LSTM(DBLSTM_cells,return_sequences=True))(maksed_input)
 output_DBLSTM = Bidirectional(LSTM(DBLSTM_cells,return_sequences=True))(DBLSTM_layer_1)
-output = TimeDistributed(Dense(x_train.shape[2], activation= 'linear'),name ='mcep_output')(output_DBLSTM)
+output = TimeDistributed(Dense(y_train.shape[2], activation= 'linear'),name ='mcep_output')(output_DBLSTM)
 
 model = Model(inputs = input, outputs = output)
 model.compile(optimizer = 'adam',

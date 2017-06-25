@@ -14,11 +14,11 @@ from keras.models import Model, model_from_json
 # Read source speaker acoustic features and target speaker acoustic features from prepared database
 print('Loading acoustic train data...')
 x_train = np.load('tmp/train_source.dtw.dyn.npy')#Source mcep
-y_train = np.load('tmp/train_target.dtw.dyn.npy')#Target mcep
+y_train = np.load('tmp/train_target.dtw.npy')[:,:-2,:]#Target mcep
 
 print('Loading acoustic validation data...')
 x_valid = np.load('tmp/test_source.dtw.dyn.npy')#Source mcep
-y_valid = np.load('tmp/test_target.dtw.dyn.npy')#Target mcep
+y_valid = np.load('tmp/test_target.dtw.npy')[:,:-2,:]#Target mcep
 
 # Hyper-parameter settings
 batch_size = 32
@@ -37,7 +37,7 @@ DNN_layer_3 = TimeDistributed(Dense(DNN_cells,activation= 'tanh'))(DNN_layer_2)
 DNN_layer_4 = TimeDistributed(Dense(DNN_cells,activation= 'tanh'))(DNN_layer_3)
 DNN_layer_5 = TimeDistributed(Dense(DNN_cells,activation= 'tanh'))(DNN_layer_4)
 DNN_layer_6 = TimeDistributed(Dense(DNN_cells,activation= 'tanh'))(DNN_layer_5)
-output = TimeDistributed(Dense(x_train.shape[2], activation= 'linear'),name ='mcep_output')(DNN_layer_6)
+output = TimeDistributed(Dense(y_train.shape[2], activation= 'linear'),name ='mcep_output')(DNN_layer_6)
 
 model = Model(inputs = input, outputs = output)
 model.compile(optimizer = 'adam',

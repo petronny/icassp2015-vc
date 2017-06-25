@@ -15,12 +15,12 @@ for i in filelist:
     feature=np.genfromtxt(i)
     features.append(feature[:,1:])
 
-if prefix.find('train')>=0:
+if prefix.find('train')>=0 and prefix.find('dtw')<0:
     tmp=np.row_stack(features)
     scaler=sklearn.preprocessing.StandardScaler().fit(tmp)
     joblib.dump(scaler,prefix+'.scaler.pkl')
 else:
-    scaler=joblib.load(prefix.replace('test','train')+'.scaler.pkl')
+    scaler=joblib.load(prefix.replace('test','train').replace('.dtw','')+'.scaler.pkl')
 
 for i in range(0,len(features)):
     if features[i].shape[0] > max_frame:
